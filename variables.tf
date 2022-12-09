@@ -44,7 +44,7 @@ variable "private_ip" {
 
 variable "web_access_port_range" {
   description = "dedicated ports for webserver access"
-  default     = [22, 80]
+  default     = ["22", "80"]
 
 }
 

@@ -32,7 +32,7 @@ resource "azurerm_network_security_group" "gl-nsg" {
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = var.web_access_port_range # Referenced SSH Port 22 and tcp 80 from vars.tf file.
+    destination_port_ranges    = var.web_access_port_range # Referenced SSH Port 22 and tcp 80 from vars.tf file.
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
