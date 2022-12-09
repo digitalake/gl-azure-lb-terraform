@@ -1,12 +1,12 @@
 #Create Locations - Availability Zones
 variable "avzs" {
-  default = ["uksouth", "ukwest", "eastus", "westeurope"]
+  default = ["North Europe", "West Europe"]
 }
 
 
 #Prefix for Corporation
-variable "corp" {
-  default = "corporate"
+variable "vmname" {
+  default = "gl-linux"
 }
 
 
@@ -42,32 +42,13 @@ variable "private_ip" {
 }
 
 
-#NFS Folders
-
-variable "nfs_fs" {
-  default = "home"
-}
-
-variable "nfs_fs_prod" {
-  default = "prod"
-}
-variable "nfs_fs_staging" {
-  default = "staging"
-}
-variable "nfs_fs_dev" {
-  default = "dev"
-}
-
-
-#Security Access
-variable "rdp_access_port" {
-  description = "dedicated rdp port for management host access"
-  default     = 3389
+variable "web_access_port_range" {
+  description = "dedicated ports for webserver access"
+  default     = [22, 80]
 
 }
 
-variable "ssh_access_port" {
-  description = "dedicated ssh port for webserver shell access"
-  default     = 22
-
+variable "admin_ssh_key_path" {
+  description = "local path to public ssh-key"
+  default = "~/.ssh/deploy.pub"
 }
