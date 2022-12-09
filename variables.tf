@@ -16,7 +16,7 @@ variable "env" {
 
 
 variable "tenant_id" {
-  type = string
+  type    = string
   default = "36b6838b-d41b-4ef5-8c96-abd06907a34e"
 }
 
@@ -50,5 +50,5 @@ variable "web_access_port_range" {
 
 variable "admin_ssh_key_path" {
   description = "local path to public ssh-key"
-  default = "~/.ssh/deploy.pub"
+  default     = "~/.ssh/deploy.pub"
 }

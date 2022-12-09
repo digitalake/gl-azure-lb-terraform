@@ -1,0 +1,5 @@
+.terraform/plugins
+.terraform/modules
+.terraform/providers
+*.tfstate.backup
+*.lock.hcl

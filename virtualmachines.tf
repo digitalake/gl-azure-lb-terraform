@@ -1,31 +1,23 @@
-# Render a multi-part cloud-init config making use of the part
-# above, and other source files
-data "template_cloudinit_config" "config" {
-  gzip          = true
-  base64_encode = true
-
-  # Main cloud-config configuration file.
-  part {
-    filename     = "init.cfg"
-    content_type = "text/cloud-config"
-    content      = "${data.template_file.script.rendered}"
-  }
+data "template_file" "script" {
+  template = file("${path.module}/cloud_init.cfg")
 }
 
+# Render a multi-part cloud-init config making use of the part
+# above, and other source files
 data "template_cloudinit_config" "webserverconfig" {
   gzip          = true
   base64_encode = true
 
-  part {
 
+  # Main cloud-config configuration file.
+  part {
+    filename     = "cloud_init.cfg"
     content_type = "text/cloud-config"
-    content      = "packages: ['nginx']"
+    content      = data.template_file.script.rendered
   }
 }
 
 
-
-# Create Network Security Group and rule
 resource "azurerm_network_security_group" "gl-nsg" {
   name                = "gl-nsg"
   location            = azurerm_resource_group.gl-resource-group.location
@@ -76,7 +68,7 @@ resource "azurerm_linux_virtual_machine" "corporate-business-linux-vm" {
   location              = azurerm_resource_group.gl-resource-group.location
   resource_group_name   = azurerm_resource_group.gl-resource-group.name
   network_interface_ids = ["${element(azurerm_network_interface.webapp.*.id, count.index)}"]
-  size                  =  "Standard_B1s"  # "Standard_D2ads_v5" # "Standard_DC1ds_v3" "Standard_D2s_v3"
+  size                  = "Standard_B1s" # "Standard_D2ads_v5" # "Standard_DC1ds_v3" "Standard_D2s_v3"
   count                 = 2
 
 

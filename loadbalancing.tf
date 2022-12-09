@@ -21,10 +21,10 @@ resource "azurerm_lb_rule" "production-inbound-rules" {
   protocol                       = "Tcp"
   frontend_port                  = 80
   backend_port                   = 80
-  frontend_ip_configuration_name = azurerm_lb.gl-lb.frontend_ip_configuration.name
+  frontend_ip_configuration_name = azurerm_lb.gl-lb.frontend_ip_configuration[0]
   probe_id                       = azurerm_lb_probe.web-access-inbound-probe.id
   backend_address_pool_ids       = ["${azurerm_lb_backend_address_pool.web-backend-pool.id}"]
- 
+
 
 }
 
