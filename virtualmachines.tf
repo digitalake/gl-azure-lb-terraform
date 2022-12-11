@@ -48,25 +48,26 @@ resource "azurerm_subnet_network_security_group_association" "gl-nsg-assoc" {
 
 
 #Availability Set - Fault Domains [Rack Resilience]
-#resource "azurerm_availability_set" "vmavset" {
-#  name                         = "vmavset"
-#  location                     = azurerm_resource_group.corporate-production-rg.location
-#  resource_group_name          = azurerm_resource_group.corporate-production-rg.name
-#  platform_fault_domain_count  = 2
-#  platform_update_domain_count = 2
-#  managed                      = true
-#  tags = {
-#    environment = "gl-net"
-#  }
-#}
+resource "azurerm_availability_set" "vmavset" {
+  name                         = "vmavset"
+  location                     = azurerm_resource_group.gl-resource-group.location
+  resource_group_name          = azurerm_resource_group.gl-resource-group.name
+  platform_fault_domain_count  = 2
+  platform_update_domain_count = 2
+  managed                      = true
+  tags = {
+    environment = "gl-net"
+  }
+}
 
 
 #Create Linux Virtual Machines Workloads
-resource "azurerm_linux_virtual_machine" "corporate-business-linux-vm" {
+resource "azurerm_linux_virtual_machine" "linux-vm" {
 
   name                  = "${var.vmname}linuxvm${count.index}"
   location              = azurerm_resource_group.gl-resource-group.location
   resource_group_name   = azurerm_resource_group.gl-resource-group.name
+  availability_set_id   = azurerm_availability_set.vmavset.id
   network_interface_ids = ["${element(azurerm_network_interface.webapp.*.id, count.index)}"]
   size                  = "Standard_B1s" # "Standard_D2ads_v5" # "Standard_DC1ds_v3" "Standard_D2s_v3"
   count                 = 2
@@ -96,7 +97,7 @@ resource "azurerm_linux_virtual_machine" "corporate-business-linux-vm" {
 
 
 
-  #Create SSH Key for Secured Authentication - on Windows Management Server [Putty + PrivateKey]
+  #Create SSH Key for Secured Authentication 
   admin_ssh_key {
     username   = "suser${count.index}"
     public_key = file("${var.admin_ssh_key_path}")
